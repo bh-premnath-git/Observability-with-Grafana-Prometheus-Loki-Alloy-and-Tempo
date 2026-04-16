@@ -1,0 +1,14 @@
+groups:
+  - name: observability-stack
+    rules:
+      - record: job:up:sum
+        expr: sum by (job) (up)
+
+      - alert: PrometheusTargetDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Target down"
+          description: "{{ $labels.job }} on {{ $labels.instance }} has been down for more than 2 minutes."
